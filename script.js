@@ -72,6 +72,7 @@ function dragDrop(e) {
     const task = document.getElementById(taskId);
     if (task && this.classList.contains('kanban-column')) {
         const columnId = this.id; // Get the column ID where the task is dropped
+        console.log(columnId);
 
         this.querySelector('.tasks').appendChild(task);
 
