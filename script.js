@@ -66,6 +66,7 @@ function dragLeave() {
 }
 
 function dragDrop(e) {
+    e.preventDefault(); // Prevent the default behavior
     this.classList.remove('over');
     const taskId = e.dataTransfer.getData('text/plain');
     const task = document.getElementById(taskId);
@@ -74,12 +75,17 @@ function dragDrop(e) {
 
         this.querySelector('.tasks').appendChild(task);
 
-        // Update the task's state in kanbanData
-        const taskData = kanbanData.find(t => t.id === taskId);
-        if (taskData) {
-            taskData.state = columnId;
+        // Find the task in kanbanData and update its state
+        const taskIndex = kanbanData.findIndex(t => t.id === taskId);
+        if (taskIndex !== -1) {
+            kanbanData[taskIndex].state = columnId;
+            console.log(`Task ${taskId} moved to ${columnId}`);
+        } else {
+            console.error('Task not found in kanbanData');
         }
     }
+    // Debug: Log the updated kanbanData to see if the state is updated correctly
+    console.log(kanbanData);
 }
 
 function getKanbanData() {
