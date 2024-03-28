@@ -1,3 +1,4 @@
+let kanbanData = [];
 let taskIdCounter = 0; // Global counter to ensure each task has a unique ID
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,6 +11,8 @@ function addTask(e) {
     const column = e.target.dataset.column;
     const taskText = prompt('Enter task description:');
     if (taskText) {
+        const taskId = `task-${taskIdCounter++}`; // Moved this line up to use the ID in the data object
+        // Create and append the task element
         const taskDiv = document.createElement('div');
         taskDiv.classList.add('task');
         taskDiv.textContent = taskText;
@@ -19,6 +22,13 @@ function addTask(e) {
         taskDiv.addEventListener('dragend', dragEnd);
 
         document.getElementById(`${column}-tasks`).appendChild(taskDiv);
+
+        // Add the task data to the kanbanData array
+        kanbanData.push({
+            id: taskId,
+            description: taskText,
+            state: column
+        });
     }
 }
 
@@ -60,8 +70,20 @@ function dragDrop(e) {
     const taskId = e.dataTransfer.getData('text/plain');
     const task = document.getElementById(taskId);
     if (task && this.classList.contains('kanban-column')) {
+        const columnId = this.id; // Get the column ID where the task is dropped
+
         this.querySelector('.tasks').appendChild(task);
+
+        // Update the task's state in kanbanData
+        const taskData = kanbanData.find(t => t.id === taskId);
+        if (taskData) {
+            taskData.state = columnId;
+        }
     }
+}
+
+function getKanbanData() {
+    console.log(kanbanData);
 }
 
 document.addEventListener('DOMContentLoaded', () => initDragAndDrop()); // Initialize drag and drop
