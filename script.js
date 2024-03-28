@@ -17,7 +17,7 @@ function addTask(e) {
         taskDiv.classList.add('task');
         taskDiv.textContent = taskText;
         taskDiv.setAttribute('draggable', true);
-        taskDiv.id = `task-${taskIdCounter++}`; // Assign a unique ID to each task
+        taskDiv.id = taskId;
         taskDiv.addEventListener('dragstart', dragStart);
         taskDiv.addEventListener('dragend', dragEnd);
 
