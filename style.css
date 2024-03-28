@@ -37,3 +37,7 @@ body, html {
 .kanban-column.over {
     border: 2px dashed #000;
 }
+
+.hide {
+    display: none;
+}

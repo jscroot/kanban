@@ -1,8 +1,9 @@
+let taskIdCounter = 0; // Global counter to ensure each task has a unique ID
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.add-task-btn').forEach(button => {
         button.addEventListener('click', addTask);
     });
-    initDragAndDrop();
 });
 
 function addTask(e) {
@@ -13,6 +14,7 @@ function addTask(e) {
         taskDiv.classList.add('task');
         taskDiv.textContent = taskText;
         taskDiv.setAttribute('draggable', true);
+        taskDiv.id = `task-${taskIdCounter++}`; // Assign a unique ID to each task
         taskDiv.addEventListener('dragstart', dragStart);
         taskDiv.addEventListener('dragend', dragEnd);
 
@@ -21,13 +23,7 @@ function addTask(e) {
 }
 
 function initDragAndDrop() {
-    const tasks = document.querySelectorAll('.task');
     const columns = document.querySelectorAll('.kanban-column');
-
-    tasks.forEach(task => {
-        task.addEventListener('dragstart', dragStart);
-        task.addEventListener('dragend', dragEnd);
-    });
 
     columns.forEach(column => {
         column.addEventListener('dragover', dragOver);
@@ -59,11 +55,13 @@ function dragLeave() {
     this.classList.remove('over');
 }
 
-function dragDrop() {
+function dragDrop(e) {
     this.classList.remove('over');
     const taskId = e.dataTransfer.getData('text/plain');
     const task = document.getElementById(taskId);
-    this.querySelector('.tasks').appendChild(task);
+    if (task && this.classList.contains('kanban-column')) {
+        this.querySelector('.tasks').appendChild(task);
+    }
 }
 
-document.addEventListener('DOMContentLoaded', initDragAndDrop);
+document.addEventListener('DOMContentLoaded', () => initDragAndDrop()); // Initialize drag and drop
